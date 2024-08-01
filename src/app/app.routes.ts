@@ -4,11 +4,6 @@ import { ProductComponent } from './components/product/product.component';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'manufacturer',
-    pathMatch: 'full',
-  },
-  {
     component: ManufacturerComponent,
     data: { title: 'Fabricantes' },
     path: 'manufacturer',
@@ -17,5 +12,14 @@ export const routes: Routes = [
     component: ProductComponent,
     data: { title: 'Productos' },
     path: 'product',
+  },
+  {
+    path: '',
+    redirectTo: 'manufacturer',
+    pathMatch: 'full',
+  },
+  {
+    path: '**',
+    redirectTo: 'manufacturer',
   },
 ];
