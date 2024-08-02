@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   Manufacturer,
   ManufacturerResponse,
@@ -21,6 +21,11 @@ export class ManufacturerService {
       .set('initialPage', initialPage.toString());
 
     return this.http.get<ManufacturerResponse>(`/pessoa`, { params });
+    // .pipe(
+    //   map((response) => {
+    //     return response.content;
+    //   })
+    // );
   }
 
   updateManufacturer(manufacturer: Manufacturer): Observable<Manufacturer> {
