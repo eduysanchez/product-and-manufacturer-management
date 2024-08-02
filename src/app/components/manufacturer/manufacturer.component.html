@@ -3,7 +3,7 @@
   <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input />
 </mat-form-field>
 
-<div class="mat-elevation-z8" *ngIf="dataSource.data.length">
+<div class="mat-elevation-z8">
   <table mat-table [dataSource]="dataSource" matSort>
     <ng-container matColumnDef="nome">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>NOME</th>
@@ -32,11 +32,14 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">
-        No data matching the filter "{{ input.value }}"
+      <td class="mat-cell" colspan="4" class="emptyDataSourte">
+        Não há dados para exibir.
       </td>
     </tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    (page)="handlePageEvent($event)"
+  ></mat-paginator>
 </div>

@@ -13,7 +13,7 @@ export class ManufacturerService {
   constructor(private http: HttpClient) {}
 
   getAllManufacturers(
-    pageSize: number = 10,
+    pageSize: number = 5,
     initialPage: number = 0
   ): Observable<ManufacturerResponse> {
     const params = new HttpParams()
@@ -21,11 +21,6 @@ export class ManufacturerService {
       .set('initialPage', initialPage.toString());
 
     return this.http.get<ManufacturerResponse>(`/pessoa`, { params });
-    // .pipe(
-    //   map((response) => {
-    //     return response.content;
-    //   })
-    // );
   }
 
   updateManufacturer(manufacturer: Manufacturer): Observable<Manufacturer> {
