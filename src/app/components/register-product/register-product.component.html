@@ -1,0 +1,58 @@
+<form
+  class="product-form"
+  [formGroup]="productForm"
+  (ngSubmit)="registerProductForm()"
+>
+  <mat-form-field>
+    <mat-label>Produto</mat-label>
+    <input matInput formControlName="nome" />
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Fabricante</mat-label>
+    <input
+      type="text"
+      matInput
+      formControlName="fabricante"
+      [matAutocomplete]="autoManufacturer"
+    />
+    <mat-autocomplete
+      autoActiveFirstOption
+      #autoManufacturer="matAutocomplete"
+      (optionSelected)="onManufacturerSelected($event.option.value)"
+    >
+      <mat-option
+        *ngFor="let option of filteredOptions | async"
+        [value]="option.nome"
+      >
+        {{ option.nome }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Codigo de Barras</mat-label>
+    <input matInput formControlName="codigoBarras" />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Descrição</mat-label>
+    <textarea matInput formControlName="descricao"></textarea>
+  </mat-form-field>
+  <div class="button-group">
+    <button
+      mat-button
+      class="custom-button reset"
+      (click)="productForm.reset()"
+    >
+      CANCELAR
+    </button>
+    <button
+      mat-button
+      class="custom-button"
+      type="submit"
+      [disabled]="productForm.invalid"
+    >
+      {{ barCode === "new" ? "ADICIONAR" : "ATUALIZAR" }}
+    </button>
+  </div>
+</form>

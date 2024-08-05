@@ -1,1 +1,10 @@
-<p>product works!</p>
+<app-table
+  (delete)="deleteProduct($event)"
+  (edit)="editProduct($event)"
+  (filter)="searchProductByBarCode($event)"
+  (pageEvent)="handlePageEvent($event)"
+  (register)="registerProduct()"
+  [dataSource]="dataSource"
+  [displayedColumns]="displayedColumns"
+  [paginator]="paginator"
+></app-table>

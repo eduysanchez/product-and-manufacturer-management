@@ -17,9 +17,9 @@ export interface ProductResponse {
 }
 
 export interface Product {
+  codigoBarras: string;
+  descricao: string;
+  fabricante: Manufacturer;
   id: number;
   nome: string;
-  descricao: string;
-  codigoBarras: string;
-  fabricante: Manufacturer;
 }

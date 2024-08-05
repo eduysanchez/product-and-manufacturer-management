@@ -1,103 +1,103 @@
-import {
-  AfterViewInit,
-  AfterViewChecked,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component } from '@angular/core';
 import { ManufacturerService } from '../../services/manufacturer.service';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import {
   MatPaginator,
   MatPaginatorIntl,
-  MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { MatSort, MatSortModule } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import {
   Manufacturer,
   ManufacturerResponse,
+  ManufacturerTableData,
 } from '../../interfaces/manufacturerResponse.interface';
-import { NgIf } from '@angular/common';
-import { CustomMatPaginatorIntl } from '../../class/custom-mat-paginator-intl/custom-mat-paginator-intl';
+import { TableComponent } from '../../shared/table/table.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-manufacturer',
   standalone: true,
-  imports: [
-    MatFormFieldModule,
-    MatInputModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
-    NgIf,
-  ],
-  providers: [{ provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }],
+  imports: [TableComponent],
   templateUrl: './manufacturer.component.html',
   styleUrl: './manufacturer.component.scss',
 })
-export class ManufacturerComponent
-  implements AfterViewInit, OnInit, AfterViewChecked
-{
+export class ManufacturerComponent {
+  dataSource: MatTableDataSource<ManufacturerTableData> =
+    new MatTableDataSource();
+
+  paginator: MatPaginator;
+
   displayedColumns: string[] = ['nome', 'cnpj', 'endereço', 'ação'];
-  dataSource: MatTableDataSource<Manufacturer> = new MatTableDataSource();
+
   manufacturers: ManufacturerResponse = {} as ManufacturerResponse;
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  page: number = 0;
 
   constructor(
     private manufacturerService: ManufacturerService,
-    private cdr: ChangeDetectorRef
-  ) {}
-
-  ngOnInit(): void {
-    this.getManufacturer();
+    private cdr: ChangeDetectorRef,
+    private paginatorIntl: MatPaginatorIntl,
+    private router: Router
+  ) {
+    this.paginator = new MatPaginator(this.paginatorIntl, this.cdr);
+    this.loadManufacturers();
   }
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.setPaginator();
-  }
-
-  ngAfterViewChecked() {
-    this.setPaginator();
-  }
-
-  getManufacturer(pageSize: number = 5, initialPage: number = 0) {
+  loadManufacturers(pageSize: number = 10, initialPage: number = 0) {
     this.manufacturerService
-      .getAllManufacturers(pageSize, initialPage)
+      .getManufacturers(pageSize, initialPage)
       .subscribe((manufacturers) => {
         this.manufacturers = manufacturers;
-        this.dataSource = new MatTableDataSource(this.manufacturers.content);
-        this.setPaginator();
+        this.setTableDataSource(manufacturers.content);
       });
   }
 
+  setTableDataSource(manufacturers: Manufacturer[]) {
+    this.dataSource = new MatTableDataSource(
+      manufacturers.map((manufacturer) => ({
+        nome: manufacturer.nome,
+        cnpj: manufacturer.cnpj,
+        endereço: `${manufacturer.logradouro}, ${manufacturer.numero}, ${manufacturer.bairro}, ${manufacturer.cidade}, ${manufacturer.estado}, ${manufacturer.cep}`,
+        id: manufacturer.id,
+      }))
+    );
+
+    this.setPaginator();
+  }
+
   setPaginator() {
-    if (this.paginator && this.manufacturers.content?.length) {
+    if (this.paginator) {
       this.paginator.length = this.manufacturers.totalElements;
       this.paginator.pageIndex = this.manufacturers.pageable.pageNumber;
       this.paginator.pageSize = this.manufacturers.pageable.pageSize;
-
-      this.cdr.detectChanges();
-    }
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
+      this.paginator.pageSizeOptions = [10, 25, 50, 100];
     }
   }
 
   handlePageEvent(pageEvent: PageEvent) {
-    this.getManufacturer(pageEvent.pageSize, pageEvent.pageIndex);
+    this.loadManufacturers(pageEvent.pageSize, pageEvent.pageIndex);
+  }
+
+  searchManufacturerByCnpj(cnpj: string) {
+    this.manufacturerService
+      .getManufacturerByCnpj(cnpj)
+      .subscribe((manufacturers) => {
+        this.manufacturers = manufacturers;
+        this.setTableDataSource(this.manufacturers.content);
+      });
+  }
+
+  registerManufacturer() {
+    this.router.navigate(['/register-manufacturer/new']);
+  }
+
+  editManufacturer(manufacturer: ManufacturerTableData): void {
+    console.log('Edit manufacturer:', manufacturer);
+  }
+
+  deleteManufacturer(manufacturer: ManufacturerTableData): void {
+    this.manufacturerService.deletePessoaById(manufacturer.id).subscribe(() => {
+      this.loadManufacturers();
+    });
   }
 }

@@ -1,0 +1,24 @@
+:host {
+  .product-form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 641px;
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 36px;
+      width: 100%;
+
+      .custom-button {
+        flex: 1;
+      }
+    }
+  }
+}

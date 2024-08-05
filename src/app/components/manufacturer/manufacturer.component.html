@@ -1,45 +1,10 @@
-<mat-form-field>
-  <mat-label>Filter</mat-label>
-  <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input />
-</mat-form-field>
-
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource" matSort>
-    <ng-container matColumnDef="nome">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>NOME</th>
-      <td mat-cell *matCellDef="let row">{{ row.nome }}</td>
-    </ng-container>
-
-    <ng-container matColumnDef="cnpj">
-      <th mat-header-cell *matHeaderCellDef>CNPJ</th>
-      <td mat-cell *matCellDef="let row">{{ row.cnpj }}%</td>
-    </ng-container>
-
-    <ng-container matColumnDef="endereço">
-      <th mat-header-cell *matHeaderCellDef>ENDEREÇO</th>
-      <td mat-cell *matCellDef="let row">
-        {{ row.logradouro }}, {{ row.numero }}, {{ row.bairro }},
-        {{ row.cidade }}, {{ row.estado }}, {{ row.cep }}
-      </td>
-    </ng-container>
-
-    <ng-container matColumnDef="ação">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>AÇÃO</th>
-      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4" class="emptyDataSourte">
-        Não há dados para exibir.
-      </td>
-    </tr>
-  </table>
-
-  <mat-paginator
-    [pageSizeOptions]="[5, 10, 25, 100]"
-    (page)="handlePageEvent($event)"
-  ></mat-paginator>
-</div>
+<app-table
+  (delete)="deleteManufacturer($event)"
+  (edit)="editManufacturer($event)"
+  (filter)="searchManufacturerByCnpj($event)"
+  (pageEvent)="handlePageEvent($event)"
+  (register)="registerManufacturer()"
+  [dataSource]="dataSource"
+  [displayedColumns]="displayedColumns"
+  [paginator]="paginator"
+></app-table>

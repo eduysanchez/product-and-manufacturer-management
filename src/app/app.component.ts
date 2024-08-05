@@ -43,7 +43,7 @@ export class AppComponent implements OnDestroy {
 
     this.navRoute = routes
       .map((route) => {
-        if (route.path !== '') {
+        if (route.path !== '' && route.data?.['showMenu']) {
           return {
             title: route.data?.['title'],
             path: route.path,

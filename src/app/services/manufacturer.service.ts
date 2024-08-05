@@ -12,8 +12,8 @@ import {
 export class ManufacturerService {
   constructor(private http: HttpClient) {}
 
-  getAllManufacturers(
-    pageSize: number = 5,
+  getManufacturers(
+    pageSize: number = 10,
     initialPage: number = 0
   ): Observable<ManufacturerResponse> {
     const params = new HttpParams()
@@ -50,17 +50,19 @@ export class ManufacturerService {
     page: number = 0,
     size: number = 10,
     sort: string = 'string'
-  ): Observable<ManufacturerResponse> {
+  ): Observable<Manufacturer[]> {
     const params = new HttpParams()
       .set('nome', name)
       .set('page', page.toString())
       .set('size', size.toString())
       .set('sort', sort);
 
-    return this.http.get<ManufacturerResponse>(`/pessoa/pessoas`, { params });
+    return this.http
+      .get<ManufacturerResponse>(`/pessoa/pessoas`, { params })
+      .pipe(map((response) => response.content));
   }
 
-  deletePessoaById(id: string): Observable<any> {
-    return this.http.delete<any>(`/pessoa/${id}`);
+  deletePessoaById(id: number): Observable<void> {
+    return this.http.delete<void>(`/pessoa/${id}`);
   }
 }

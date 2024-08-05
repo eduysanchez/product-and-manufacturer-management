@@ -1,5 +1,5 @@
-import { Pageable } from "./pageable.interface";
-import { Sort } from "./sort.interface";
+import { Pageable } from './pageable.interface';
+import { Sort } from './sort.interface';
 
 export interface ManufacturerResponse {
   content: Manufacturer[];
@@ -28,4 +28,11 @@ export interface Manufacturer {
   estado: string;
   contatoTipo: string;
   contato: string;
+}
+
+export interface ManufacturerTableData {
+  nome: string;
+  cnpj: string;
+  endereço: string;
+  id: number;
 }

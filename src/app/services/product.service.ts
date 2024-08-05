@@ -5,14 +5,18 @@ import {
   Product,
   ProductResponse,
 } from '../interfaces/productResponse.interface';
+import { SnackBarService } from './snack-bar.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private snackBarService: SnackBarService
+  ) {}
 
-  getAllProducts(
+  getProducts(
     pageSize: number = 10,
     initialPage: number = 0
   ): Observable<ProductResponse> {
@@ -23,20 +27,8 @@ export class ProductService {
     return this.http.get<ProductResponse>(`/produto`, { params });
   }
 
-  getProductByCodigoBarras(
-    codigoBarras: string,
-    page: number = 0,
-    size: number = 10,
-    sort: string = 'string'
-  ): Observable<ProductResponse> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('size', size.toString())
-      .set('sort', sort);
-
-    return this.http.get<ProductResponse>(`/produto/${codigoBarras}`, {
-      params,
-    });
+  getProductByBarCode(codigoBarras: string): Observable<ProductResponse> {
+    return this.http.get<ProductResponse>(`/produto/${codigoBarras}`);
   }
 
   updateProduct(id: string, product: Product): Observable<Product> {
@@ -47,7 +39,7 @@ export class ProductService {
     return this.http.post<Product>('/produto', product);
   }
 
-  deleteProduct(id: string): Observable<void> {
+  deleteProductById(id: number): Observable<void> {
     return this.http.delete<void>(`/produto/${id}`);
   }
 }
