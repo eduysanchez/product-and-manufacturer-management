@@ -4,11 +4,12 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
+  HttpHeaders,
 } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 import { Observable, of, throwError, timer } from 'rxjs';
 import { catchError, delayWhen, retry } from 'rxjs/operators';
-import { SnackBarService } from '../services/snack-bar.service';
+import { SnackBarService, SnackBarType } from '../services/snack-bar.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,9 +23,15 @@ export class HttpInterceptorService implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     const baseUrl = 'https://desafio-tecnico-frontend.azurewebsites.net';
 
-    const url = `${baseUrl}${req.url}`;
+    const url = req.url.startsWith('http') ? req.url : `${baseUrl}${req.url}`;
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    });
 
     const reqClone = req.clone({
+      headers,
       url,
     });
 
@@ -49,7 +56,7 @@ export class HttpInterceptorService implements HttpInterceptor {
 
     let message = error.message || DEFAULT_ERROR_MESSAGE;
 
-    this.snackBarService.openSnackBar(message);
+    this.snackBarService.openSnackBar(message, SnackBarType.ERROR);
 
     return throwError(() => new Error(message));
   }

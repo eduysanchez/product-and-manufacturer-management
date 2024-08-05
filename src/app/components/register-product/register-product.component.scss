@@ -1,5 +1,5 @@
 :host {
-  .product-form {
+  .form {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -9,7 +9,7 @@
       width: 100%;
     }
 
-    .button-group {
+    .group-element {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -19,6 +19,13 @@
       .custom-button {
         flex: 1;
       }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .group-element {
+      flex-direction: column;
+      gap: 16px;
     }
   }
 }

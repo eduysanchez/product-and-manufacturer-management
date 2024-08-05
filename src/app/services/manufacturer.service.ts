@@ -5,6 +5,7 @@ import {
   Manufacturer,
   ManufacturerResponse,
 } from '../interfaces/manufacturerResponse.interface';
+import { Address } from '../interfaces/address.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -64,5 +65,9 @@ export class ManufacturerService {
 
   deletePessoaById(id: number): Observable<void> {
     return this.http.delete<void>(`/pessoa/${id}`);
+  }
+
+  getAddressByCep(cep: string): Observable<Address> {
+    return this.http.get<Address>(`https://viacep.com.br/ws/${cep}/json/`);
   }
 }

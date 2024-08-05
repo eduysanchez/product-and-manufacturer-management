@@ -1,1 +1,72 @@
-<p>register-manufacturer works!</p>
+<form
+  class="form"
+  [formGroup]="manufacturerForm"
+  (ngSubmit)="registerManufacturerForm()"
+>
+  <mat-form-field>
+    <mat-label>CNPJ</mat-label>
+    <input matInput formControlName="cnpj" mask="00.000.000/0000-00" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Nome</mat-label>
+    <input matInput formControlName="nome" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>CEP</mat-label>
+    <input matInput formControlName="cep" mask="00000-000" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Endereço</mat-label>
+    <input matInput formControlName="endereco" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Número</mat-label>
+    <input matInput formControlName="numero" />
+  </mat-form-field>
+
+  <div class="group-element">
+    <mat-form-field>
+      <mat-label>Complemento</mat-label>
+      <input matInput formControlName="complemento" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Bairro</mat-label>
+      <input matInput formControlName="bairro" />
+    </mat-form-field>
+  </div>
+
+  <div class="group-element">
+    <mat-form-field>
+      <mat-label>Cidade</mat-label>
+      <input matInput formControlName="cidade" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Estado</mat-label>
+      <input matInput formControlName="estado" />
+    </mat-form-field>
+  </div>
+
+  <div class="group-element">
+    <button
+      mat-button
+      class="custom-button reset"
+      (click)="manufacturerForm.reset()"
+    >
+      CANCELAR
+    </button>
+    <button
+      mat-button
+      class="custom-button"
+      type="submit"
+      [disabled]="manufacturerForm.invalid"
+    >
+      {{ cnpj === "new" ? "ADICIONAR" : "ATUALIZAR" }}
+    </button>
+  </div>
+</form>

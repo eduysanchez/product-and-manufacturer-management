@@ -1,13 +1,23 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
+export enum SnackBarType {
+  SUCCESS = 'success',
+  ERROR = 'error',
+  WARNING = 'warning',
+  INFO = 'info',
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class SnackBarService {
   constructor(private _snackBar: MatSnackBar) {}
 
-  openSnackBar(message: string) {
-    this._snackBar.open(message);
+  openSnackBar(message: string, type: SnackBarType = SnackBarType.SUCCESS) {
+    this._snackBar.open(message, '', {
+      duration: 1000,
+      panelClass: [`snack-bar-${type}`],
+    });
   }
 }

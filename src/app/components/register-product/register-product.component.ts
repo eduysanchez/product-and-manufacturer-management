@@ -27,6 +27,7 @@ import {
 } from '../../interfaces/manufacturerResponse.interface';
 import { ManufacturerService } from '../../services/manufacturer.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { SnackBarService } from '../../services/snack-bar.service';
 
 @Component({
   selector: 'app-register-product',
@@ -58,7 +59,8 @@ export class RegisterProductComponent implements OnInit {
     private productService: ProductService,
     private manufacturerService: ManufacturerService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackBarService
   ) {
     this.productForm = this.fb.group({
       codigoBarras: ['', Validators.required],
@@ -80,6 +82,7 @@ export class RegisterProductComponent implements OnInit {
       this.barCode = params.get('id') || 'new';
       if (this.barCode !== 'new') {
         this.getProduct(this.barCode);
+        return;
       }
     });
 
@@ -119,8 +122,19 @@ export class RegisterProductComponent implements OnInit {
   }
 
   registerProductForm(): void {
-    this.productService.createProduct(this.product).subscribe((product) => {
-      if (product) {
+    if (!this.product?.id) {
+      this.productService.createProduct(this.product).subscribe((product) => {
+        if (product.id) {
+          this.snackBarService.openSnackBar('Produto cadastrado com sucesso!');
+          this.getProduct(product.codigoBarras);
+        }
+      });
+      return;
+    }
+
+    this.productService.updateProduct(this.product).subscribe((product) => {
+      if (product.id) {
+        this.snackBarService.openSnackBar('Produto atualizado com sucesso!');
         this.getProduct(product.codigoBarras);
       }
     });
@@ -128,7 +142,10 @@ export class RegisterProductComponent implements OnInit {
 
   getProduct(barCode: string): void {
     this.productService.getProductByBarCode(barCode).subscribe((product) => {
-      if (!product.content.length) this.router.navigate(['/product/new']);
+      if (!product.content.length) {
+        this.router.navigate(['/register-product/new']);
+        return;
+      }
 
       this.productForm.patchValue({
         ...product.content[0],

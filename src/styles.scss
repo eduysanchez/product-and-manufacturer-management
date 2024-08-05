@@ -52,3 +52,27 @@ body {
   height: 40px !important;
   border-radius: 4px !important;
 }
+
+.snack-bar-success {
+  .mat-mdc-snackbar-surface {
+    background-color: #4caf50 !important;
+  }
+}
+
+.snack-bar-info {
+  .mat-mdc-snackbar-surface {
+    background-color: #2196f3 !important;
+  }
+}
+
+.snack-bar-error {
+  .mat-mdc-snackbar-surface {
+    background-color: #f44336 !important;
+  }
+}
+
+.snack-bar-warning {
+  .mat-mdc-snackbar-surface {
+    background-color: #ff9800 !important;
+  }
+}

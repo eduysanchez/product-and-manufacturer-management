@@ -27,12 +27,24 @@ export class ProductService {
     return this.http.get<ProductResponse>(`/produto`, { params });
   }
 
-  getProductByBarCode(codigoBarras: string): Observable<ProductResponse> {
-    return this.http.get<ProductResponse>(`/produto/${codigoBarras}`);
+  getProductByBarCode(
+    codigoBarras: string,
+    page: number = 0,
+    size: number = 10,
+    sort: string = 'string'
+  ): Observable<ProductResponse> {
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString())
+      .set('sort', sort.toString());
+
+    return this.http.get<ProductResponse>(`/produto/${codigoBarras}`, {
+      params,
+    });
   }
 
-  updateProduct(id: string, product: Product): Observable<Product> {
-    return this.http.put<Product>(`/produto/${id}`, product);
+  updateProduct(product: Product): Observable<Product> {
+    return this.http.put<Product>(`/produto/`, product);
   }
 
   createProduct(product: Product): Observable<Product> {

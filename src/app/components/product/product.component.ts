@@ -12,6 +12,10 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { Router } from '@angular/router';
+import {
+  SnackBarService,
+  SnackBarType,
+} from '../../services/snack-bar.service';
 
 @Component({
   selector: 'app-product',
@@ -35,7 +39,8 @@ export class ProductComponent {
     private productService: ProductService,
     private cdr: ChangeDetectorRef,
     private paginatorIntl: MatPaginatorIntl,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackBarService
   ) {
     this.paginator = new MatPaginator(this.paginatorIntl, this.cdr);
     this.loadProducts();
@@ -86,6 +91,10 @@ export class ProductComponent {
 
   deleteProduct(product: Product): void {
     this.productService.deleteProductById(product.id).subscribe(() => {
+      this.snackBarService.openSnackBar(
+        'Produto excluído com sucesso!',
+        SnackBarType.SUCCESS
+      );
       this.loadProducts();
     });
   }

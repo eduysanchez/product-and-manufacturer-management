@@ -13,6 +13,7 @@ import {
 } from '../../interfaces/manufacturerResponse.interface';
 import { TableComponent } from '../../shared/table/table.component';
 import { Router } from '@angular/router';
+import { SnackBarService } from '../../services/snack-bar.service';
 
 @Component({
   selector: 'app-manufacturer',
@@ -37,7 +38,8 @@ export class ManufacturerComponent {
     private manufacturerService: ManufacturerService,
     private cdr: ChangeDetectorRef,
     private paginatorIntl: MatPaginatorIntl,
-    private router: Router
+    private router: Router,
+    private snackBarService: SnackBarService
   ) {
     this.paginator = new MatPaginator(this.paginatorIntl, this.cdr);
     this.loadManufacturers();
@@ -92,11 +94,12 @@ export class ManufacturerComponent {
   }
 
   editManufacturer(manufacturer: ManufacturerTableData): void {
-    console.log('Edit manufacturer:', manufacturer);
+    this.router.navigate(['/register-manufacturer', manufacturer.cnpj]);
   }
 
   deleteManufacturer(manufacturer: ManufacturerTableData): void {
     this.manufacturerService.deletePessoaById(manufacturer.id).subscribe(() => {
+      this.snackBarService.openSnackBar('Fabricante excluído com sucesso!');
       this.loadManufacturers();
     });
   }
