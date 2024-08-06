@@ -18,8 +18,8 @@
         <img src="icons/search.svg" alt="Busca" />
       </button>
       <button
-        matSuffix
         mat-icon-button
+        matSuffix
         aria-label="Clear"
         (click)="formCnpj.reset()"
         *ngIf="applyFilter"
@@ -44,9 +44,11 @@
 
     <ng-container matColumnDef="cnpj">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>
-        {{ "cnpj".toLocaleUpperCase() | mask : "00.000.000/0000-00" }}
+        {{ "cnpj".toLocaleUpperCase() }}
       </th>
-      <td mat-cell *matCellDef="let row">{{ row.cnpj }}%</td>
+      <td mat-cell *matCellDef="let row">
+        {{ row.cnpj | mask : "00.000.000/0000-00" }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="endereço">

@@ -16,7 +16,7 @@ export class SnackBarService {
 
   openSnackBar(message: string, type: SnackBarType = SnackBarType.SUCCESS) {
     this._snackBar.open(message, '', {
-      duration: 1000,
+      duration: 5000,
       panelClass: [`snack-bar-${type}`],
     });
   }

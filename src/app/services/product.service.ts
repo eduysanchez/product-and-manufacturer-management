@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import {
   Product,
   ProductResponse,
+  RegisterProduct,
 } from '../interfaces/productResponse.interface';
 import { SnackBarService } from './snack-bar.service';
 
@@ -43,12 +44,12 @@ export class ProductService {
     });
   }
 
-  updateProduct(product: Product): Observable<Product> {
-    return this.http.put<Product>(`/produto/`, product);
+  updateProduct(product: RegisterProduct): Observable<RegisterProduct> {
+    return this.http.put<RegisterProduct>(`/produto/`, product);
   }
 
-  createProduct(product: Product): Observable<Product> {
-    return this.http.post<Product>('/produto', product);
+  createProduct(product: RegisterProduct): Observable<RegisterProduct> {
+    return this.http.post<RegisterProduct>('/produto', product);
   }
 
   deleteProductById(id: number): Observable<void> {

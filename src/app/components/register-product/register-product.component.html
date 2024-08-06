@@ -1,11 +1,10 @@
-<form
-  class="form"
-  [formGroup]="productForm"
-  (ngSubmit)="registerProductForm()"
->
+<form class="form" [formGroup]="form" (ngSubmit)="registerProductForm()">
   <mat-form-field>
     <mat-label>Produto</mat-label>
     <input matInput formControlName="nome" />
+    <mat-error *ngIf="form.get('nome')?.hasError('required')">
+      El nome é obrigatório
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field class="example-full-width">
@@ -28,29 +27,34 @@
         {{ option.nome }}
       </mat-option>
     </mat-autocomplete>
+    <mat-error *ngIf="form.get('fabricante')?.hasError('required')">
+      O fabricante é obrigatório
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Codigo de Barras</mat-label>
-    <input matInput formControlName="codigoBarras" />
+    <input matInput formControlName="codigoBarras" mask="00000000000000" />
+    <mat-error *ngIf="form.get('codigoBarras')?.hasError('required')">
+      O codigo de barra é obrigatório
+    </mat-error>
   </mat-form-field>
   <mat-form-field>
     <mat-label>Descrição</mat-label>
     <textarea matInput formControlName="descricao"></textarea>
+    <mat-error *ngIf="form.get('descricao')?.hasError('required')">
+      A descrição é obligatoria
+    </mat-error>
   </mat-form-field>
   <div class="button-group">
-    <button
-      mat-button
-      class="custom-button reset"
-      (click)="productForm.reset()"
-    >
+    <button mat-button class="custom-button reset" (click)="form.reset()">
       CANCELAR
     </button>
     <button
       mat-button
       class="custom-button"
       type="submit"
-      [disabled]="productForm.invalid"
+      [disabled]="form.invalid"
     >
       {{ barCode === "new" ? "ADICIONAR" : "ATUALIZAR" }}
     </button>

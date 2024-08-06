@@ -26,6 +26,11 @@ export interface Manufacturer {
   bairro: string;
   cidade: string;
   estado: string;
-  contatoTipo: string;
+  contatoTipo: TypeContact;
   contato: string;
+}
+
+export enum TypeContact {
+  Email = 'Email',
+  Phone = 'Telefone',
 }

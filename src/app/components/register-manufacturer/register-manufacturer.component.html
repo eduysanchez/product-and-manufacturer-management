@@ -1,31 +1,88 @@
-<form
-  class="form"
-  [formGroup]="manufacturerForm"
-  (ngSubmit)="registerManufacturerForm()"
->
+<form class="form" [formGroup]="form" (ngSubmit)="registerManufacturerForm()">
   <mat-form-field>
     <mat-label>CNPJ</mat-label>
     <input matInput formControlName="cnpj" mask="00.000.000/0000-00" />
+    <mat-error *ngIf="form.get('cnpj')?.hasError('required')">
+      O CNPJ é obrigatório
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Nome</mat-label>
     <input matInput formControlName="nome" />
+    <mat-error *ngIf="form.get('nome')?.hasError('required')">
+      O nome é obrigatório
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Tipo de Contato</mat-label>
+    <mat-select formControlName="contatoTipo">
+      <mat-option
+        *ngFor="let key of typeContactKeys"
+        [value]="typeContact[key]"
+      >
+        {{ typeContact[key] }}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="form.get('contatoTipo')?.hasError('required')">
+      O tipo de contato é obrigatório
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="selectedContactType === typeContact.Email">
+    <mat-label>Email</mat-label>
+    <input
+      matInput
+      formControlName="contato"
+      mask="A*@A*.SSS"
+      [validation]="true"
+      [dropSpecialCharacters]="false"
+      placeholder="exemplo@dominio.com"
+    />
+    <mat-error *ngIf="form.get('contato')?.hasError('required')">
+      O email é obrigatório
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field *ngIf="selectedContactType === typeContact.Phone">
+    <mat-label>Telefone</mat-label>
+    <input
+      matInput
+      formControlName="contato"
+      prefix="+55 "
+      mask="(00) 00000-0000"
+      [validation]="true"
+      [dropSpecialCharacters]="false"
+      placeholder="+55 (00) 00000-0000"
+    />
+    <mat-error *ngIf="form.get('contato')?.hasError('required')">
+      O telefone é obrigatório
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>CEP</mat-label>
     <input matInput formControlName="cep" mask="00000-000" />
+    <mat-error *ngIf="form.get('cep')?.hasError('required')">
+      O CEP é obrigatório
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Endereço</mat-label>
-    <input matInput formControlName="endereco" />
+    <input matInput formControlName="logradouro" readonly />
+    <mat-error *ngIf="form.get('logradouro')?.hasError('required')">
+      O endereço é obrigatório
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field>
     <mat-label>Número</mat-label>
     <input matInput formControlName="numero" />
+    <mat-error *ngIf="form.get('numero')?.hasError('required')">
+      O número é obrigatório
+    </mat-error>
   </mat-form-field>
 
   <div class="group-element">
@@ -36,35 +93,40 @@
 
     <mat-form-field>
       <mat-label>Bairro</mat-label>
-      <input matInput formControlName="bairro" />
+      <input matInput formControlName="bairro" readonly />
+      <mat-error *ngIf="form.get('bairro')?.hasError('required')">
+        O bairro é obrigatório
+      </mat-error>
     </mat-form-field>
   </div>
 
   <div class="group-element">
     <mat-form-field>
       <mat-label>Cidade</mat-label>
-      <input matInput formControlName="cidade" />
+      <input matInput formControlName="cidade" readonly />
+      <mat-error *ngIf="form.get('cidade')?.hasError('required')">
+        A cidade é obrigatória
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Estado</mat-label>
-      <input matInput formControlName="estado" />
+      <input matInput formControlName="estado" readonly />
+      <mat-error *ngIf="form.get('estado')?.hasError('required')">
+        O estado é obrigatório
+      </mat-error>
     </mat-form-field>
   </div>
 
   <div class="group-element">
-    <button
-      mat-button
-      class="custom-button reset"
-      (click)="manufacturerForm.reset()"
-    >
+    <button mat-button class="custom-button reset" (click)="form.reset()">
       CANCELAR
     </button>
     <button
       mat-button
       class="custom-button"
       type="submit"
-      [disabled]="manufacturerForm.invalid"
+      [disabled]="form.invalid"
     >
       {{ cnpj === "new" ? "ADICIONAR" : "ATUALIZAR" }}
     </button>

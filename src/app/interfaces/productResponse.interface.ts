@@ -23,3 +23,12 @@ export interface Product {
   id: number;
   nome: string;
 }
+
+export interface RegisterProduct {
+  id: number;
+  nome: string;
+  descricao: string;
+  codigoBarras: string;
+  fabricante: string;
+  fabricanteID: number;
+}
