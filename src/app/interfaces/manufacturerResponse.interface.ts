@@ -29,10 +29,3 @@ export interface Manufacturer {
   contatoTipo: string;
   contato: string;
 }
-
-export interface ManufacturerTableData {
-  nome: string;
-  cnpj: string;
-  endereço: string;
-  id: number;
-}

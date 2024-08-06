@@ -28,20 +28,23 @@ import {
 import { ManufacturerService } from '../../services/manufacturer.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SnackBarService } from '../../services/snack-bar.service';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
   selector: 'app-register-product',
   standalone: true,
   imports: [
+    AsyncPipe,
     FormsModule,
-    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
-    MatAutocompleteModule,
-    AsyncPipe,
     NgFor,
+    ReactiveFormsModule,
+    NgxMaskDirective,
   ],
+  providers: [provideNgxMask()],
   templateUrl: './register-product.component.html',
   styleUrl: './register-product.component.scss',
 })

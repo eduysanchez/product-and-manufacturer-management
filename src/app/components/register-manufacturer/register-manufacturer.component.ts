@@ -45,7 +45,6 @@ export class RegisterManufacturerComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private snackBarService: SnackBarService,
     private manufacturerService: ManufacturerService
@@ -53,7 +52,7 @@ export class RegisterManufacturerComponent implements OnInit {
     this.manufacturerForm = this.fb.group({
       cnpj: ['', Validators.required],
       nome: ['', Validators.required],
-      cep: ['', [Validators.required, Validators.pattern(/^\d{5}-\d{3}$/)]],
+      cep: ['', Validators.required],
       endereco: [{ value: '', disabled: true }, Validators.required],
       numero: ['', Validators.required],
       complemento: ['', Validators.required],

@@ -1,10 +1,98 @@
-<app-table
-  (delete)="deleteManufacturer($event)"
-  (edit)="editManufacturer($event)"
-  (filter)="searchManufacturerByCnpj($event)"
-  (pageEvent)="handlePageEvent($event)"
-  (register)="registerManufacturer()"
-  [dataSource]="dataSource"
-  [displayedColumns]="displayedColumns"
-  [paginator]="paginator"
-></app-table>
+<div class="custom-header">
+  <form [formGroup]="formCnpj" (ngSubmit)="searchManufacturerByCnpj()">
+    <mat-form-field appearance="outline" class="custom-filter">
+      <input
+        matInput
+        placeholder="Busca"
+        formControlName="cnpj"
+        mask="00.000.000/0000-00"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        type="submit"
+        *ngIf="!applyFilter"
+        [disabled]="formCnpj.invalid"
+        (click)="applyFilter = !applyFilter"
+      >
+        <img src="icons/search.svg" alt="Busca" />
+      </button>
+      <button
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="formCnpj.reset()"
+        *ngIf="applyFilter"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+  <button mat-button class="custom-button" (click)="registerManufacturer()">
+    CADASTRAR
+  </button>
+</div>
+
+<div class="mat-elevation-z8">
+  <table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="nome">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ "Nome".toLocaleUpperCase() }}
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.nome }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="cnpj">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ "cnpj".toLocaleUpperCase() | mask : "00.000.000/0000-00" }}
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.cnpj }}%</td>
+    </ng-container>
+
+    <ng-container matColumnDef="endereço">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "endereço".toLocaleUpperCase() }}
+      </th>
+      <td mat-cell *matCellDef="let row">{{ getAddress(row) }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ação">
+      <th mat-header-cell *matHeaderCellDef class="action-header">
+        {{ "ação".toLocaleUpperCase() }}
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <div class="action-column">
+          <button
+            mat-mini-fab
+            class="button-action"
+            (click)="editManufacturer(row)"
+          >
+            <img src="icons/edit.svg" alt="Editar" class="icon" />
+          </button>
+          <button
+            mat-mini-fab
+            class="button-action"
+            (click)="deleteManufacturer(row)"
+          >
+            <img src="icons/trash.svg" alt="Excluir" class="icon" />
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td
+        class="mat-cell"
+        [colSpan]="displayedColumns.length"
+        class="emptyDataSourte"
+      >
+        Não há dados para exibir.
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator (page)="handlePageEvent($event)"></mat-paginator>
+</div>
