@@ -1,10 +1,102 @@
-<app-table
-  (delete)="deleteProduct($event)"
-  (edit)="editProduct($event)"
-  (filter)="searchProductByBarCode($event)"
-  (pageEvent)="handlePageEvent($event)"
-  (register)="registerProduct()"
-  [dataSource]="dataSource"
-  [displayedColumns]="displayedColumns"
-  [paginator]="paginator"
-></app-table>
+<div class="custom-header">
+  <form [formGroup]="form" (ngSubmit)="searchProductByBarCode()">
+    <mat-form-field appearance="outline" class="custom-filter">
+      <input matInput placeholder="Busca" formControlName="barCode" />
+      <button
+        mat-icon-button
+        matSuffix
+        type="submit"
+        *ngIf="!applyFilter"
+        [disabled]="form.invalid"
+        (click)="applyFilter = !applyFilter"
+      >
+        <img src="icons/search.svg" alt="Busca" />
+      </button>
+      <button
+        mat-icon-button
+        matSuffix
+        aria-label="Clear"
+        (click)="resetFormBarCode()"
+        *ngIf="applyFilter"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+  <button mat-button class="custom-button" (click)="registerProduct()">
+    CADASTRAR
+  </button>
+</div>
+
+<div class="table-container mat-elevation-z8" tabindex="0">
+  <table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="produto">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ "produto".toLocaleUpperCase() }}
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <strong>{{ row.nome }}</strong>
+        <small>{{ row.codigoBarras }}</small>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fabricante">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>
+        {{ "Fabricante".toLocaleUpperCase() }}
+      </th>
+      <td mat-cell *matCellDef="let row">
+        {{ row.fabricante.nome }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="descrição">
+      <th mat-header-cell *matHeaderCellDef>
+        {{ "descrição".toLocaleUpperCase() }}
+      </th>
+      <td mat-cell *matCellDef="let row">{{ row.descricao }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="ação">
+      <th mat-header-cell *matHeaderCellDef class="action-header">
+        {{ "ação".toLocaleUpperCase() }}
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <div class="action-column">
+          <button mat-mini-fab class="button-action" (click)="editProduct(row)">
+            <img src="icons/edit.svg" alt="Editar" class="icon" />
+          </button>
+          <button
+            mat-mini-fab
+            class="button-action"
+            (click)="deleteProduct(row)"
+          >
+            <img src="icons/trash.svg" alt="Excluir" class="icon" />
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td
+        class="mat-cell"
+        [colSpan]="displayedColumns.length"
+        class="emptyDataSourte"
+      >
+        Não há dados para exibir.
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator
+    [pageSizeOptions]="pageSizeOptions"
+    showFirstLastButtons
+    [length]="length"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    (page)="onPageEvent($event)"
+  >
+  </mat-paginator>
+</div>

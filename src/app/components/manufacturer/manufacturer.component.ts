@@ -16,7 +16,6 @@ import {
   Manufacturer,
   ManufacturerResponse,
 } from '../../interfaces/manufacturerResponse.interface';
-import { TableComponent } from '../../shared/table/table.component';
 import { Router } from '@angular/router';
 import { SnackBarService } from '../../services/snack-bar.service';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,13 +27,13 @@ import { MatInputModule } from '@angular/material/input';
 import { NgxMaskDirective, NgxMaskPipe, provideNgxMask } from 'ngx-mask';
 import {
   FormBuilder,
-  FormControl,
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-manufacturer',
@@ -54,7 +53,6 @@ import { MatIconModule } from '@angular/material/icon';
     NgxMaskDirective,
     NgxMaskPipe,
     ReactiveFormsModule,
-    TableComponent,
     MatIconModule,
   ],
   providers: [
@@ -65,32 +63,41 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './manufacturer.component.scss',
 })
 export class ManufacturerComponent implements AfterViewInit {
+  form: FormGroup;
+  applyFilter: boolean = false;
+
   dataSource: MatTableDataSource<Manufacturer> = new MatTableDataSource();
   displayedColumns: string[] = ['nome', 'cnpj', 'endereço', 'ação'];
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort = new MatSort();
 
-  filterValue: string = '';
   manufacturers: ManufacturerResponse = {} as ManufacturerResponse;
-  page: number = 0;
 
-  formCnpj: FormGroup;
-  applyFilter: boolean = false;
+  private pageEventSubject = new Subject<PageEvent>();
+  page: number = 0;
+  length: number = 0;
+  pageIndex: number = 0;
+  pageSize: number = 0;
+  pageSizeOptions: number[] = [10, 25, 50, 100];
 
   constructor(
-    private manufacturerService: ManufacturerService,
     private cdr: ChangeDetectorRef,
+    private fb: FormBuilder,
+    private manufacturerService: ManufacturerService,
     private paginatorIntl: MatPaginatorIntl,
     private router: Router,
-    private snackBarService: SnackBarService,
-    private fb: FormBuilder
+    private snackBarService: SnackBarService
   ) {
-    this.formCnpj = this.fb.group({
+    this.form = this.fb.group({
       cnpj: ['', Validators.required],
     });
 
     this.paginator = new MatPaginator(this.paginatorIntl, this.cdr);
     this.loadManufacturers();
+
+    this.pageEventSubject
+      .pipe(debounceTime(300))
+      .subscribe((event) => this.handlePageEvent(event));
   }
 
   ngAfterViewInit() {
@@ -111,15 +118,19 @@ export class ManufacturerComponent implements AfterViewInit {
 
   setTableDataSource(manufacturers: Manufacturer[]) {
     this.dataSource = new MatTableDataSource(manufacturers);
+    this.setPaginator();
   }
 
   setPaginator() {
-    if (this.paginator && this.manufacturers && this.manufacturers.pageable) {
-      this.paginator.length = this.manufacturers.totalElements;
-      this.paginator.pageIndex = this.manufacturers.pageable.pageNumber;
-      this.paginator.pageSize = this.manufacturers.pageable.pageSize;
-      this.paginator.pageSizeOptions = [10, 25, 50, 100];
+    if (this.manufacturers && this.manufacturers.pageable) {
+      this.length = this.manufacturers.totalElements;
+      this.pageIndex = this.manufacturers.pageable.pageNumber;
+      this.pageSize = this.manufacturers.pageable.pageSize;
     }
+  }
+
+  onPageEvent(event: PageEvent) {
+    this.pageEventSubject.next(event);
   }
 
   handlePageEvent(pageEvent: PageEvent) {
@@ -128,7 +139,7 @@ export class ManufacturerComponent implements AfterViewInit {
 
   searchManufacturerByCnpj() {
     this.manufacturerService
-      .getManufacturerByCnpj(this.formCnpj.controls['cnpj'].value)
+      .getManufacturerByCnpj(this.form.controls['cnpj'].value)
       .subscribe((manufacturers) => {
         this.manufacturers = manufacturers;
         this.setTableDataSource(this.manufacturers.content);

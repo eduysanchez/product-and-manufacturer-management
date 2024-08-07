@@ -36,16 +36,30 @@
     mat-sidenav-content {
       padding-left: 16px;
       padding-right: 16px;
-      display: flex;
 
-      .menu-open {
-        position: relative;
-        width: 50px;
-        padding-right: 10px;
+      .header {
+        height: 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
 
         .mat-mdc-icon-button {
-          position: absolute;
-          top: 5px;
+          padding-left: 0;
+        }
+
+        .setting {
+          display: flex;
+          gap: 20px;
+          align-items: center;
+
+          .avatar {
+            width: 40px;
+            height: 40px;
+
+            img {
+              border-radius: 50%;
+            }
+          }
         }
       }
     }

@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -44,7 +49,7 @@ import { MatSelectModule } from '@angular/material/select';
   templateUrl: './register-manufacturer.component.html',
   styleUrl: './register-manufacturer.component.scss',
 })
-export class RegisterManufacturerComponent implements OnInit {
+export class RegisterManufacturerComponent implements OnInit, AfterViewInit {
   form: FormGroup;
 
   cnpj: string = '';
@@ -56,7 +61,8 @@ export class RegisterManufacturerComponent implements OnInit {
     private manufacturerService: ManufacturerService,
     private route: ActivatedRoute,
     private router: Router,
-    private snackBarService: SnackBarService
+    private snackBarService: SnackBarService,
+    private cdr: ChangeDetectorRef
   ) {
     this.form = this.fb.group({
       cnpj: ['', Validators.required],
@@ -82,13 +88,15 @@ export class RegisterManufacturerComponent implements OnInit {
       }
     });
 
-    this.form
-      .get('contatoTipo')
-      ?.valueChanges.subscribe((value) => {
-        this.setContactValidators(value);
-      });
+    this.form.get('contatoTipo')?.valueChanges.subscribe((value) => {
+      this.setContactValidators(value);
+    });
 
     this.getCep();
+  }
+
+  ngAfterViewInit(): void {
+    this.cdr.detectChanges();
   }
 
   get manufacturer() {
@@ -115,12 +123,8 @@ export class RegisterManufacturerComponent implements OnInit {
     this.form.controls['cep'].valueChanges.subscribe((cep) => {
       if (cep.length === 8) {
         this.manufacturerService.getAddressByCep(cep).subscribe((address) => {
-          this.form.controls['logradouro'].setValue(
-            address.logradouro
-          );
-          this.form.controls['complemento'].setValue(
-            address.complemento
-          );
+          this.form.controls['logradouro'].setValue(address.logradouro);
+          this.form.controls['complemento'].setValue(address.complemento);
           this.form.controls['bairro'].setValue(address.bairro);
           this.form.controls['cidade'].setValue(address.localidade);
           this.form.controls['estado'].setValue(address.uf);
@@ -167,6 +171,7 @@ export class RegisterManufacturerComponent implements OnInit {
       .createManufacturer(this.manufacturer)
       .subscribe((manufacturer) => {
         this.manufacturerResponse(manufacturer);
+        return;
       });
   }
 

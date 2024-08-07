@@ -157,21 +157,16 @@ export class RegisterProductComponent implements OnInit {
       return;
     }
 
-    if (this.product?.id) {
+    if (this.product.id) {
       this.productService.updateProduct(this.product).subscribe((product) => {
-        if (product.id) {
-          this.snackBarService.openSnackBar('Produto atualizado com sucesso!');
-          this.productResponse(product);
-        }
+        this.productResponse(product);
       });
       return;
     }
 
     this.productService.createProduct(this.product).subscribe((product) => {
-      if (product.id) {
-        this.snackBarService.openSnackBar('Produto cadastrado com sucesso!');
-        this.productResponse(product);
-      }
+      this.productResponse(product);
+      return;
     });
   }
 

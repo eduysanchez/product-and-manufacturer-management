@@ -13,7 +13,7 @@ export class CustomMatPaginatorIntl extends MatPaginatorIntl {
     if (length === 0 || pageSize === 0) {
       return `0 de ${length}`;
     }
-    
+
     return `of ${length}`;
   };
 }

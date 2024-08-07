@@ -53,6 +53,10 @@ body {
   border-radius: 4px !important;
 }
 
+.custom-button.mat-mdc-button-disabled {
+  background-color: #b0b0b0 !important;
+}
+
 .snack-bar-success {
   .mat-mdc-snackbar-surface {
     background-color: #4caf50 !important;

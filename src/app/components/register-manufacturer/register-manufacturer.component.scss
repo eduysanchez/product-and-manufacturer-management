@@ -24,8 +24,7 @@
 
   @media (max-width: 768px) {
     .group-element {
-      flex-direction: column;
-      gap: 16px;
+      gap: 16px !important;
     }
   }
 }

@@ -126,7 +126,7 @@
       mat-button
       class="custom-button"
       type="submit"
-      [disabled]="form.invalid"
+      [disabled]="!form.valid"
     >
       {{ cnpj === "new" ? "ADICIONAR" : "ATUALIZAR" }}
     </button>

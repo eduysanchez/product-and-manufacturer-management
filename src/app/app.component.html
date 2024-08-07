@@ -1,5 +1,5 @@
 <div class="container">
-  <mat-sidenav-container class="sidenav-container">
+  <mat-sidenav-container class="sidenav-container" [hasBackdrop]="hasBackdrop">
     <mat-sidenav #sidenav mode="side" [(opened)]="opened">
       <div class="header">
         <img src="icons/flow_store.svg" alt="Flow Store" />
@@ -19,10 +19,32 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-      <div class="menu-open" *ngIf="!opened">
-        <button mat-icon-button (click)="toggleSidenav()">
-          <img src="icons/menu-open.svg" alt="Menu open" />
-        </button>
+      <div class="header">
+        <div class="menu-button">
+          <button mat-icon-button *ngIf="!opened" (click)="toggleSidenav()">
+            <img src="icons/menu-open.svg" alt="Menu open" />
+          </button>
+        </div>
+        <div class="setting">
+          <button
+            mat-icon-button
+            (click)="toggleBadgeVisibility()"
+            class="alert"
+          >
+            <mat-icon
+              class="icon-badge"
+              matBadge="7"
+              [matBadgeHidden]="hidden"
+              matBadgePosition="above after"
+              matBadgeOverlap="true"
+              aria-hidden="false"
+              >notifications</mat-icon
+            >
+          </button>
+          <div class="avatar">
+            <img src="users/eduy-sanchez.jpg" alt="Eduy Sanchez" />
+          </div>
+        </div>
       </div>
       <router-outlet></router-outlet>
     </mat-sidenav-content>

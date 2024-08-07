@@ -45,7 +45,7 @@ export class ProductService {
   }
 
   updateProduct(product: RegisterProduct): Observable<RegisterProduct> {
-    return this.http.put<RegisterProduct>(`/produto/`, product);
+    return this.http.put<RegisterProduct>(`/produto`, product);
   }
 
   createProduct(product: RegisterProduct): Observable<RegisterProduct> {
