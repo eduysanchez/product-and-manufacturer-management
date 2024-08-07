@@ -76,3 +76,10 @@ body {
     background-color: #ff9800 !important;
   }
 }
+
+.nav-item .mdc-list-item__primary-text {
+  color: #23272e !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

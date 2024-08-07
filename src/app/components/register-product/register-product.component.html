@@ -34,9 +34,9 @@
 
   <mat-form-field>
     <mat-label>Codigo de Barras</mat-label>
-    <input matInput formControlName="codigoBarras" mask="00000000000000" />
-    <mat-error *ngIf="form.get('codigoBarras')?.hasError('required')">
-      O codigo de barra é obrigatório
+    <input matInput formControlName="codigoBarras" maxlength="14" />
+    <mat-error *ngIf="form.get('codigoBarras')?.errors?.['invalidBarCode']">
+      O código de barras deve ser um número de 8, 12, 13 ou 14 dígitos.
     </mat-error>
   </mat-form-field>
   <mat-form-field>

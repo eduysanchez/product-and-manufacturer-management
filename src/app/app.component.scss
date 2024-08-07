@@ -7,17 +7,27 @@
   left: 0;
   right: 0;
 
-  .is-mobile .toolbar {
-    position: fixed;
-    z-index: 2;
-  }
-
-  h1.app-name {
-    margin-left: 8px;
-  }
-
   mat-sidenav.mat-drawer {
+    background-color: white;
     width: 260px !important;
+    padding: 0 14px;
+    border-radius: 0;
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+
+      & > h1.app-name {
+        margin-right: 25px;
+        font-family: sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+        line-height: 24px;
+        text-align: left;
+      }
+    }
   }
 
   .sidenav-container {
@@ -26,10 +36,37 @@
     mat-sidenav-content {
       padding-left: 16px;
       padding-right: 16px;
+      display: flex;
+
+      .menu-open {
+        position: relative;
+        width: 50px;
+        padding-right: 10px;
+
+        .mat-mdc-icon-button {
+          position: absolute;
+          top: 5px;
+        }
+      }
+    }
+
+    mat-nav-list {
+      .mdc-list-item:focus,
+      .mdc-list-item:hover {
+        background-color: #f3f4f8 !important;
+        border-radius: 4px !important;
+      }
     }
   }
+}
 
-  .is-mobile .sidenav-container {
-    flex: 1 0 auto;
+@media (max-width: 800px) {
+  .container {
+    .sidenav-container {
+      mat-sidenav-content {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+      }
+    }
   }
 }

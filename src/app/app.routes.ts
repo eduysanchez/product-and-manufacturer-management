@@ -7,7 +7,7 @@ import { RegisterProductComponent } from './components/register-product/register
 export const routes: Routes = [
   {
     component: ManufacturerComponent,
-    data: { showMenu: true, title: 'Fabricantes' },
+    data: { icon: 'users', showMenu: true, title: 'Fabricantes' },
     path: 'manufacturer',
   },
   {
@@ -17,7 +17,7 @@ export const routes: Routes = [
   },
   {
     component: ProductComponent,
-    data: { showMenu: true, title: 'Productos' },
+    data: { icon: 'box', showMenu: true, title: 'Productos' },
     path: 'product',
   },
   {
@@ -26,11 +26,13 @@ export const routes: Routes = [
     path: 'register-product/:id',
   },
   {
+    data: { showMenu: false },
     path: '',
     redirectTo: 'manufacturer',
     pathMatch: 'full',
   },
   {
+    data: { showMenu: false },
     path: '**',
     redirectTo: 'manufacturer',
   },

@@ -74,7 +74,7 @@ export class RegisterProductComponent implements OnInit {
     private snackBarService: SnackBarService
   ) {
     this.form = this.fb.group({
-      codigoBarras: ['', Validators.required],
+      codigoBarras: ['', [Validators.required, barCodeValidator()]],
       descricao: ['', Validators.required],
       fabricante: ['', Validators.required],
       fabricanteID: ['', Validators.required],
