@@ -20,12 +20,13 @@
 
     <mat-sidenav-content>
       <div class="header">
-        <div class="menu-button">
+        <div class="sub-header left">
           <button mat-icon-button *ngIf="!opened" (click)="toggleSidenav()">
             <img src="icons/menu-open.svg" alt="Menu open" />
           </button>
+          <h1>{{ currentTitle }}</h1>
         </div>
-        <div class="setting">
+        <div class="sub-header right">
           <button
             mat-icon-button
             (click)="toggleBadgeVisibility()"

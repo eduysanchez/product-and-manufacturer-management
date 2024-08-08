@@ -1,5 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterModule,
+  RouterOutlet,
+} from '@angular/router';
 import { NgClass, NgIf } from '@angular/common';
 
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -13,6 +19,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { routes } from './app.routes';
 import { NavRoute } from './interfaces/navRoute.interface';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -40,8 +47,13 @@ export class AppComponent implements OnInit {
   hasBackdrop: boolean = false;
 
   navRoute: NavRoute[] = [];
+  currentTitle: string = '';
 
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {
     this.navRoute = routes
       .map((route) => {
         if (route.data?.['showMenu']) {
@@ -67,6 +79,18 @@ export class AppComponent implements OnInit {
           this.opened = true;
           this.hasBackdrop = false;
         }
+      });
+
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        let route = this.activatedRoute.firstChild;
+        while (route?.firstChild) {
+          route = route.firstChild;
+        }
+        route?.data.subscribe((data) => {
+          this.currentTitle = data['title'] || '';
+        });
       });
   }
 
